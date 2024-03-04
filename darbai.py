@@ -29,7 +29,23 @@ class Klientas(Autombilis):
 
     def __str__(self):
         return f'{self.nuomosPunktas} {self.kaina}, {self.arIsnuomuotas}, {self.vardas}, {self.pavarde}, {self.nuolaida}'    
+    
+    def grazinti_automobili(self):
+        if self.arIsnuomuotas:
+            self.arIsnuomuotas = False
+            print(f"{self.vardas} {self.pavarde} sėkmingai grąžino automobilį.")
+        else:
+            print("Automobilis jau grąžintas.")
+            
 
+    def atnaujinti_duomenis(self, vardas, pavarde, nuolaida):
+        self.vardas = vardas
+        self.pavarde = pavarde
+        self.nuolaida = nuolaida
+        print("Kliento duomenys atnaujinti sėkmingai.")
+
+    def automobiliu_istorija(self):
+        print(f"{self.vardas} {self.pavarde} automobilių nuomos istorija:")
 
 client1 = Klientas('antras', 300, True, 'Vardenis', 'Pavardenis', '20%')
  
@@ -67,6 +83,33 @@ class FilmuDuomenuBaze:
     def filmu_sarasas(self):
      for filmas in self.filmu_list:
          print(filmas)
+
+
+    def surasti_pagal(self, paieskos_zodis):
+        print(f"Surandami filmai pagal pavadinimą, rezisierių arba žanrą, kuriuose yra: {paieskos_zodis}")
+        rasti_filmai = []
+        for filmas in self.filmu_list:
+            if paieskos_zodis.lower() in filmas.pavadinimas.lower() or paieskos_zodis.lower() in filmas.rezisierius.lower() or paieskos_zodis.lower() in filmas.zanras.lower():
+                rasti_filmai.append(filmas)
+        if rasti_filmai:
+            print("Rasti filmai:")
+            for filmas in rasti_filmai:
+                print(filmas)
+        else:
+     
+            print("Filmai pagal paiešką nerasti.")
+
+    def atnaujinti_filma(self, filmo_id, naujas_pavadinimas, naujas_rezisierius, nauji_metai, naujas_zanras, naujas_reitingas):
+        for filmas in self.filmu_list:
+            if filmas.filmo_id == filmo_id:
+                filmas.pavadinimas = naujas_pavadinimas
+                filmas.rezisierius = naujas_rezisierius
+                filmas.metai = nauji_metai
+                filmas.zanras = naujas_zanras
+                filmas.reitingas = naujas_reitingas
+                print(f"Filmas su ID {filmo_id} atnaujintas sėkmingai.")
+                return
+        print(f"Filmas su ID {filmo_id} nerastas.")             
 
     def salinti_filma(self, filmo_id):
         for filmas in self.filmu_list:
@@ -125,6 +168,34 @@ class ReceptuKnyga:
         for pavadinimas in self.receptu_list:
             print(pavadinimas)
 
+    def surasti_pagal_pavadinima_ingredientus(self, paieskos_zodis):
+        print(f"Surandami receptai pagal pavadinimą arba ingredientus, kurių pavadinime ar ingredientuose yra: {paieskos_zodis}")
+        rasti_receptai = []
+        for receptas in self.receptu_list:
+            if paieskos_zodis.lower() in receptas.pavadinimas.lower() or paieskos_zodis.lower() in receptas.ingredientai.lower():
+                rasti_receptai.append(receptas)
+        if rasti_receptai:
+            print("Rasti receptai:")
+            for receptas in rasti_receptai:
+                print(receptas)
+        else:
+            print("Receptų pagal paiešką nerasta.")
+
+    def atnaujinti_recepta(self, recepto_id, naujas_pavadinimas, nauji_ingredientai, naujos_instrukcijos):
+        for receptas in self.receptu_list:
+            if receptas.recepto_id == recepto_id:
+                receptas.pavadinimas = naujas_pavadinimas
+                receptas.ingredientai = nauji_ingredientai
+                receptas.instrukcijos = naujos_instrukcijos
+                print(f"Receptas su ID {recepto_id} atnaujintas sėkmingai.")
+                return
+        print(f"Receptas su ID {recepto_id} nerastas")  
+
+    def pateikti_statistika(self):
+        print("Receptų statistika:")
+        print(f"Viso receptų: {len(self.receptu_list)}")
+                          
+
     def salinti_recepta(self, recepto_id):
         for pavadinimas in self.receptu_list:
             if pavadinimas.recepto_id == recepto_id:
@@ -182,6 +253,42 @@ class Restoranas:
         else:
             print("Negalima gauti neigiamos sumos pinigų.")
 
+
+    def prideti_patiekala(self, patiekalas):
+        self.patiekalai.append(patiekalas)
+        print(f"Patiekalas {patiekalas} pridėtas prie meniu.")
+
+    def pasalinti_patiekala(self, pavadinimas):
+        for patiekalas in self.patiekalai:
+            if patiekalas.pavadinimas == pavadinimas:
+                self.patiekalai.remove(patiekalas)
+                print(f"Patiekalas {pavadinimas} pašalintas iš meniu.")
+                return
+        print(f"Patiekalas {pavadinimas} nerastas meniu.")
+
+    def keisti_patiekalo_kaina(self, pavadinimas, nauja_kaina):
+        for patiekalas in self.patiekalai:
+            if patiekalas.pavadinimas == pavadinimas:
+                patiekalas.kaina = nauja_kaina
+                print(f"Patiekalo {pavadinimas} kaina pakeista į {nauja_kaina}.")
+                return
+        print(f"Patiekalas {pavadinimas} nerastas meniu.")
+ 
+
+    def apmoketi_uz_uzsakyma(self, suma):
+        if suma <= self.pinigai:
+            self.pinigai -= suma
+            print(f"Apmokėta {suma} už užsakymą. Dabar restorane yra {self.pinigai} pinigų.")
+        else:
+            print("Nepakanka pinigų apmokėti už užsakymą.")
+
+    def patikrinti_arbatpinigius(self, suma):
+        if suma <= self.arbatpinigiai:
+            self.arbatpinigiai -= suma
+            print(f"Sumokėta {suma} arbatpinigių. Dabar restorane yra {self.arbatpinigiai} arbatpinigių.")
+        else:
+            print("Nepakanka arbatpinigių sumokėti už užsakymą.")        
+
 class Meniu:
     def __init__(self, patiekalai):
         self.patiekalai = patiekalai
@@ -228,6 +335,45 @@ class Daržas:
 
     def sodinti_augalą(self, augalas):
         self.augalai.append(augalas)
+
+    def iškasti_augalą(self, veislė):
+        for augalas in self.augalai:
+            if augalas.veislė == veislė:
+                self.augalai.remove(augalas)
+                print(f"{veislė} iškastas iš daržo.")
+                return
+        print(f"{veislė} nerastas darže.")
+
+    def laistyti_augalus(self):
+        print("Laistome augalus...")
+        for augalas in self.augalai:
+            print(f"{augalas.veislė} laistomas.")
+
+    def tręšti_augalus(self):
+        print("Tręšiame augalus...")
+        for augalas in self.augalai:
+            print(f"{augalas.veislė} tręšiamas.")
+
+    def patikrinti_augalų_būklę(self):
+        print("Patikriname augalų būklę...")
+        for augalas in self.augalai:
+            print(f"{augalas.veislė} būklė patikrinta.")
+
+    def skinti_derlių(self):
+        print("Skinti derlių...")
+        for augalas in self.augalai:
+            if augalas.būsena == 'brandus':
+                print(f"{augalas.veislė} yra pasiruošęs derliui ir yra nukirptas.")
+                self.augalai.remove(augalas)
+
+    def sekti_augalų_būseną(self):
+        print("Sekame augalų būseną...")
+        for augalas in self.augalai:
+            print(f"{augalas.veislė} būsena sekiama.")
+
+    def nurpinti_piktžoles(self):
+        print("Nurpiname piktžoles...")
+        print("Piktžolės nurpintos.")        
 
     def priežiūros_darbai(self):
         for augalas in self.augalai:
